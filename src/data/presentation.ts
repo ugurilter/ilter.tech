@@ -16,7 +16,7 @@ const presentation: Presentation = {
     title: "Hi, I’m Ugur 👋",
     profile: "/profile-pic.jpeg",
     description:
-        "Hello, I'm a *Sr. Embedded Software Engineer* (currently working for *Airties*) with over *6+ years* of embedded software development experience. Outside of work I'm interested in web development technologies such as *nodejs*, *reactjs* and *nextjs*. I also love to play video games in my spare times ! 🎮",
+        "Hello, I'm a *Sr. Embedded Software Engineer* (currently working for *Airties*) with over *6+ years* of embedded software development experience. Outside of work I'm interested in web development technologies such as *nodejs*, *reactjs* and *nextjs*. I also love to play video games in my spare time! 🎮",
     socials: [
         {
             label: "Linkedin",
@@ -32,7 +32,11 @@ const presentation: Presentation = {
         },
         {
             label: "Steam",
-            link: "https://linkedin.com/in/ugurilter/",
+            link: "https://steamcommunity.com/id/kerneldev/",
+        },
+        {
+            label: "Discord",
+            link: "https://discord.com/users/144871706257784832",
         },
     ],
 };

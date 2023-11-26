@@ -5,7 +5,7 @@ description: "HacktheBox CTF - Cyber Apocalypse"
 isPublish: true
 ---
 
-## HTB Cyber Apocalype CTF
+## HTB Cyber Apocalypse CTF
 
 I came accross a new CTF on [ctftime.org](https://ctftime.org/) today and decided to give it a try for fun.
 

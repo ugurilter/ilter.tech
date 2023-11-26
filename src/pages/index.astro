@@ -23,18 +23,29 @@ const posts = (await getCollection("posts")).sort(function (first, second) {
             class="flex flex-col gap-8 md:flex-row-reverse md:justify-end md:gap-48">
             {
                 presentation.profile && (
-                    <Image
-                        src={presentation.profile}
-                        class="w-1/4 self-center rounded-full"
-                        alt="Your Profile"
-                        width="200"
-                        height="200"
-                    />
+                    <div class="flex flex-col items-center gap-12">
+                        <Image
+                            src={presentation.profile}
+                            class="w-1/2 self-center rounded-full"
+                            alt="Your Profile"
+                            width="200"
+                            height="200"
+                        />
+
+                        <div class="flex flex-row gap-2 text-neutral-100 items-center">
+                            <div id="activity" style="position: relative; top: -30px;" class="flex gap-2 rounded-md border border-neutral-50 p-2"></div>
+                        </div>
+
+                        <div style="position: relative; top: -70px;" class="flex flex-row gap-2 text-neutral-100 items-center rounded-md border-neutral-50 border p-2">
+                            <div id="status" class="text-neutral-100"></div>
+                            <div id="statusTxt" class=""></div>
+                        </div>
+                    </div>
                 )
             }
 
             <div class="flex flex-col gap-8">
-                <h1 class="text-3xl text-neutral-100">
+                <h1 class="text-3xl text-neutral-100 flex items-center gap-2">
                     {presentation.title}
                 </h1>
 

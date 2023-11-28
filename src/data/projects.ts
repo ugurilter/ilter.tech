@@ -5,6 +5,13 @@ export type Project = {
     isComingSoon?: boolean;
 };
 
-const projects: Project[] = [];
+const projects: Project[] = [
+    {
+        title: "Portfolio / Template",
+        techs: ["Astro"],
+        link: "/",
+        // isComingSoon: true,
+    },
+];
 
 export default projects;

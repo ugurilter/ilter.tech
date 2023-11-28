@@ -22,8 +22,9 @@ const posts = (await getCollection("posts")).sort(function (first, second) {
         <article
             class="flex flex-col gap-8 md:flex-row-reverse md:justify-end md:gap-48">
             {
+                
                 presentation.profile && (
-                    <div class="flex flex-col items-center gap-12">
+                    <div class="flex flex-col items-center gap-2">
                         <Image
                             src={presentation.profile}
                             class="w-1/2 self-center rounded-full"
@@ -31,15 +32,16 @@ const posts = (await getCollection("posts")).sort(function (first, second) {
                             width="200"
                             height="200"
                         />
-
-                        <div class="flex flex-row gap-2 text-neutral-100 items-center">
-                            <div id="activity" style="position: relative; top: -30px;" class="flex gap-2 rounded-md border border-neutral-50 p-2"></div>
+                        
+                        <div id="status" class="inline-flex items-center py-[4px] px-[12px] rounded-[6px] text-l font-medium gap-1">
+                            <div id="status-c" style="height: 8px; width: 8px; border-radius: 24px; opacity: 1; margin-top: 3px;"></div>
+                            <div id="statusTxt" class="ml-1 font-sans font-normal text-[14px] not-italic leading-5"></div>
                         </div>
 
-                        <div style="position: relative; top: -70px;" class="flex flex-row gap-2 text-neutral-100 items-center rounded-md border-neutral-50 border p-2">
-                            <div id="status" class="text-neutral-100"></div>
-                            <div id="statusTxt" class=""></div>
+                        <div style="" class="inline-flex items-center py-[2px] px-[12px] rounded-[6px] bg-blue-950 text-l font-medium text-blue-400">
+                            <div id="activity" class="flex gap-2 ml-1 font-sans font-normal text-[11px] italic leading-5"></div>
                         </div>
+                       
                     </div>
                 )
             }

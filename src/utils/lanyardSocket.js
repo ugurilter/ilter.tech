@@ -1,58 +1,82 @@
-function update_user_data(j) {
-    var data = JSON.parse(j);
-    const dc_status = data.d.discord_status;
-    const dc_activity = data.d.activities[0];
-    const statusElement = document.getElementById('status');
-    const statusCElement = document.getElementById('status-c');
-    const statusTxtElement = document.getElementById('statusTxt');
-
+function fill_status(data) {
     const status_map = {
-        'online': 'st-green',
-        'offline': 'st-red',
-        'idle': 'st-orange',
-        'dnd': 'st-red'
+        'online': { mclass: 'st-green', text: 'online', cclass: 'st-c-green' },
+        'offline': { mclass: 'st-red', text: 'offline', cclass: 'st-c-red' },
+        'idle': { mclass: 'st-orange', text: 'idle', cclass: 'st-c-orange' },
+        'dnd': { mclass: 'st-red', text: 'DnD', cclass: 'st-c-red' }
     };
 
-    const status_c_map = {
-        'online': 'st-c-green',
-        'offline': 'st-c-red',
-        'idle': 'st-c-orange',
-        'dnd': 'st-c-red'
-    }
-
+    const statusElement    = document.getElementById('status');
+    const statusCElement   = document.getElementById('status-c');
+    const statusTxtElement = document.getElementById('statusTxt');
+    const dc_status        = data.d.discord_status;
+    
     if (dc_status) {
-        const statusClass = status_map[dc_status] ?? '';
-        const statusCClass = status_c_map[dc_status] ?? '';
+        console.log(status_map[dc_status].mclass);
+        const statusClass  = status_map[dc_status].mclass ?? '';
+        const statusCClass = status_map[dc_status].cclass ?? '';
+        const statusText   = status_map[dc_status].text ?? '';
 
         statusCElement.classList.remove('st-c-green', 'st-c-red', 'st-c-orange');
         statusElement.classList.remove('st-green', 'st-red', 'st-orange');
         statusCElement.classList.add(statusCClass);
         statusElement.classList.add(statusClass);
-        statusTxtElement.textContent = dc_status;
-    }
-
-    if (dc_activity) {
-        const activityTypeElement = document.getElementById('activity-type');
-
-        if (dc_activity.name === 'YouTube Music') {
-            activityTypeElement.innerHTML =  '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 9l10.5-3m0 6.553v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 11-.99-3.467l2.31-.66a2.25 2.25 0 001.632-2.163zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 01-.99-3.467l2.31-.66A2.25 2.25 0 009 15.553z" /></svg>';
-            activityTypeElement.innerHTML += 'Listening: ';
-            activityTypeElement.innerHTML += '<marquee scrollamount=3 behavior="scroll">' + dc_activity.state + ' - ' + dc_activity.details + '</marquee>'
-        } else if (dc_activity.name === 'Custom Status') {
-            activityTypeElement.innerHTML =  dc_activity.state + dc_activity.emoji.name;
-        } else if (!dc_activity.state && !dc_activity.details) {
-            activityTypeElement.innerHTML = 'Playing: ' + dc_activity.name;
-        }
-    } else {
-        const activityElement = document.getElementById('activity-type');
-
-        if (activityElement) {
-            activityElement.innerHTML = 'Doing nothing...';
-        }
+        statusTxtElement.textContent = statusText;
     }
 }
 
+function fill_listening(activity) {
+    const listeningElem = document.getElementById('listening');
+
+    listeningElem.innerHTML = activity.state + ' - ' + activity.details;
+}
+
+function fill_playing(activity) {
+    const playingElem = document.getElementById('playing');
+
+    playingElem.innerHTML = activity.name;
+}
+
+function fill_working(activity) {
+    const workingElem = document.getElementById('working');
+
+    workingElem.innerHTML = activity.state.split('Workspace: ')[1] + '<br/>' + activity.details.split('Editing ')[1];
+}
+
+function clean_up_user_data() {
+    const listeningElem = document.getElementById('listening');
+    const playingElem   = document.getElementById('playing');
+    const workingElem   = document.getElementById('working');
+
+    listeningElem.innerHTML = '-';
+    playingElem.innerHTML   = '-';
+    workingElem.innerHTML   = '-';
+}
+
+function update_user_data(j) {
+    var data = JSON.parse(j);
+    console.log(data);
+
+    fill_status(data);
+
+    const dc_activities = data.d.activities;
+
+    clean_up_user_data();
+
+    dc_activities.forEach(activity => {
+        if (activity.name === 'YouTube Music') {
+            fill_listening(activity);
+        } else if (activity.name === 'Visual Studio Code') {
+            fill_working(activity);
+        } else if (activity.name && !activity.details) {
+            fill_playing(activity);
+        }
+    });
+}
+
 document.addEventListener("DOMContentLoaded", function() {
+    clean_up_user_data();
+
     const socket = new WebSocket("wss://api.lanyard.rest/socket");
     let data = { subscribe_to_id: '144871706257784832' };
     let type = 'one';

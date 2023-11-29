@@ -39,7 +39,7 @@ const headTags = Astro.props;
             }
 
             .st-c-orange {
-                background-color: rgb(234 179 8 / 1);;
+                background-color: rgb(234 179 8 / 1);
             }
 
             .st-orange {
@@ -54,6 +54,59 @@ const headTags = Astro.props;
             .st-red {
                 background-color: #2D0606;
                 color: #E64C4C;
+            }
+
+            .ani-bg-green {
+                background-image: linear-gradient(#062D1D,#4CE6A6);
+            }
+
+            .ani-bg-orange {
+                background-image: linear-gradient(#af8021,rgb(234 179 8 / 1));
+            }
+
+            .ani-bg-red {
+                background-image: linear-gradient(#2D0606,#E64C4C);
+            }
+
+            .ani-circle {
+                border-style: solid;
+                border-color: transparent;
+                border-radius: 48%;
+                border-width: 0;
+                animation: rotateCircle 8s linear infinite;
+                width: 262px;
+                height: 262px;
+                top: 158px;
+                z-index: -1;
+                position: absolute;
+            }
+
+            @media (max-width:767px) {
+                .ani-circle {
+                    top: 109px;
+                }
+            }
+
+            @keyframes rotateCircle {
+                0% {
+                    transform: rotate(0);
+                }
+
+                25% {
+                    transform: rotate(90deg);
+                }
+
+                50% {
+                    transform: rotate(180deg);
+                }
+
+                75% {
+                    transform: rotate(270deg);
+                }
+
+                100% {
+                    transform: rotate(360deg);
+                }
             }
         </style>
         <script src="../utils/lanyardSocket.js"></script>

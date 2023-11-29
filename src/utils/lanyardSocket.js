@@ -1,11 +1,22 @@
-function fill_status(data) {
-    const status_map = {
-        'online': { mclass: 'st-green', text: 'online', cclass: 'st-c-green' },
-        'offline': { mclass: 'st-red', text: 'offline', cclass: 'st-c-red' },
-        'idle': { mclass: 'st-orange', text: 'idle', cclass: 'st-c-orange' },
-        'dnd': { mclass: 'st-red', text: 'DnD', cclass: 'st-c-red' }
-    };
+const status_map = {
+    'online': { mclass: 'st-green', text: 'online', cclass: 'st-c-green', aniclass: 'ani-bg-green' },
+    'offline': { mclass: 'st-red', text: 'offline', cclass: 'st-c-red', aniclass: '' },
+    'idle': { mclass: 'st-orange', text: 'idle', cclass: 'st-c-orange', aniclass: 'ani-bg-orange' },
+    'dnd': { mclass: 'st-red', text: 'DnD', cclass: 'st-c-red', aniclass: 'ani-bg-red' },
+};
 
+function set_animation(data) {
+    const dc_status        = data.d.discord_status;
+    const aniCircleElement = document.getElementById('ani-circle');
+    const aniClass     = status_map[dc_status].aniclass ?? '';
+
+    aniCircleElement.classList.remove('ani-bg-green', 'ani-bg-red', 'ani-bg-orange');
+    if (aniClass !== '') {
+        aniCircleElement.classList.add(aniClass);
+    }
+}
+
+function fill_status(data) {
     const statusElement    = document.getElementById('status');
     const statusCElement   = document.getElementById('status-c');
     const statusTxtElement = document.getElementById('statusTxt');
@@ -16,6 +27,7 @@ function fill_status(data) {
         const statusClass  = status_map[dc_status].mclass ?? '';
         const statusCClass = status_map[dc_status].cclass ?? '';
         const statusText   = status_map[dc_status].text ?? '';
+
 
         statusCElement.classList.remove('st-c-green', 'st-c-red', 'st-c-orange');
         statusElement.classList.remove('st-green', 'st-red', 'st-orange');
@@ -43,6 +55,12 @@ function fill_working(activity) {
     workingElem.innerHTML = activity.state.split('Workspace: ')[1] + '<br/>' + activity.details.split('Editing ')[1];
 }
 
+function fill_tooltip(status) {
+    const ttipElem = document.getElementById('st-tooltip');
+
+    ttipElem.innerHTML = status_map[status].text ?? '';
+}
+
 function clean_up_user_data() {
     const listeningElem = document.getElementById('listening');
     const playingElem   = document.getElementById('playing');
@@ -55,9 +73,12 @@ function clean_up_user_data() {
 
 function update_user_data(j) {
     var data = JSON.parse(j);
-    console.log(data);
+    const ppic = document.getElementById('profile-pic');
+    const dc_status        = data.d.discord_status
 
-    fill_status(data);
+    // fill_status(data);
+    fill_tooltip(dc_status);
+    set_animation(data);
 
     const dc_activities = data.d.activities;
 
@@ -81,8 +102,6 @@ document.addEventListener("DOMContentLoaded", function() {
     let data = { subscribe_to_id: '144871706257784832' };
     let type = 'one';
     let Users = new Map();
-
-    socket.onopen = () => console.log("opened socket connection");
 
     socket.onmessage = (event) => {
         const json = JSON.parse(event.data);

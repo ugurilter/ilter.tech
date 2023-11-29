@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
+
+.tooltip {
+    @apply invisible;
+  }
+  
+  .has-tooltip:hover .tooltip {
+    @apply invisible z-50;
+  }
+
 @tailwind utilities;

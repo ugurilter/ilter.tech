@@ -1,5 +1,5 @@
 ---
-import { SITE_REPO } from "@/data/config";
+import { SITE_URL } from "@/data/config";
 import removeTrailingSlash from "@/utils/removeTrailingSlash";
 import presentation from "@/data/presentation";
 
@@ -15,7 +15,7 @@ const pathname = removeTrailingSlash(Astro.url.pathname);
         <ul role="list" class="flex flex-row gap-2">
             <li>
                 <a
-                    href={SITE_REPO}
+                    href={SITE_URL}
                     class:list={{
                         ["hover:text-neutral-100"]: true,
                         ["text-neutral-100"]: pathname === "/",
@@ -25,7 +25,7 @@ const pathname = removeTrailingSlash(Astro.url.pathname);
             <li>/</li>
             <li>
                 <a
-                    href={`${SITE_REPO}/posts`}
+                    href={`/posts`}
                     class:list={{
                         ["hover:text-neutral-100"]: true,
                         ["text-neutral-100"]: pathname === "/posts",
@@ -35,7 +35,7 @@ const pathname = removeTrailingSlash(Astro.url.pathname);
             <li>/</li>
             <li>
                 <a
-                    href={`${SITE_REPO}/resume.pdf`}
+                    href={`/resume.pdf`}
                     class:list={{
                         ["hover:text-neutral-100"]: true,
                         ["text-neutral-100"]: pathname === "/resume.pdf",

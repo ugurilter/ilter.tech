@@ -1,5 +1,3 @@
-import { SITE_REPO } from "./config";
-
 type Social = {
     label: string;
     link: string;
@@ -16,7 +14,7 @@ type Presentation = {
 const presentation: Presentation = {
     mail: "ugur@ilter.tech",
     title: "Hi, I’m Ugur 👋",
-    profile: `${SITE_REPO}/profile-pic.jpeg`,
+    profile: `/profile-pic.jpeg`,
     description:
         "Hello, I'm a *Sr. Embedded Software Engineer* (currently working for *Airties*) with over *6+ years* of embedded software development experience. Besides work I'm interested in web development technologies such as *nodejs*, *reactjs* and *nextjs*. I also love to play video games in my spare time! 🎮",
     socials: [

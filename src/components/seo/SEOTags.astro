@@ -1,6 +1,6 @@
 ---
 import { SEO } from "astro-seo";
-import { SITE_URL, SITE_REPO } from "@/data/config";
+import { SITE_URL } from "@/data/config";
 import type { HeadTags } from "@/utils/types/HeadTags";
 import GoogleAnalytics from "../GoogleAnalytics.astro";
 
@@ -45,7 +45,7 @@ const openGraph = {
         }}
         extend={{
             link: [
-                { rel: "icon", href: `${SITE_REPO}/favicon.svg` },
+                { rel: "icon", href: `/favicon.svg` },
                 { rel: "sitemap", href: "/sitemap-index.xml" },
             ],
             meta: [
